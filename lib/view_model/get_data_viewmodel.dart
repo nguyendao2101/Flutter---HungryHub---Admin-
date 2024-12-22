@@ -146,4 +146,50 @@ class GetDataViewModel extends GetxController {
       print('Error fetching orders: $e');
     }
   }
+
+  //ham update san pham
+  Future<void> updateProduct(
+      String productId, Map<String, dynamic> updatedData) async {
+    try {
+      await _firestore.collection('products').doc(productId).update(updatedData);
+
+      // Log kết quả
+      print('Sản phẩm với ID $productId đã được cập nhật thành công.');
+
+      // Cập nhật sản phẩm trong danh sách
+      final productIndex = products.indexWhere((p) => p['id'] == productId);
+      if (productIndex != -1) {
+        products[productIndex] = {
+          ...products[productIndex],
+          ...updatedData,
+        };
+      }
+    } catch (e) {
+      print('Lỗi khi cập nhật sản phẩm: $e');
+    }
+  }
+
+  Future<void> addProduct(Map<String, dynamic> productData) async {
+    try {
+      // Tạo một document mới trong collection 'products'
+      final docRef = await _firestore.collection('products').add(productData);
+
+      // Lấy ID được tự động tạo bởi Firestore và cập nhật vào dữ liệu sản phẩm
+      final productId = docRef.id;
+      productData['id'] = productId;
+
+      // Cập nhật dữ liệu sản phẩm trong Firestore
+      await _firestore.collection('products').doc(productId).update(productData);
+
+      // Log kết quả
+      print('Sản phẩm với ID $productId đã được thêm thành công.');
+
+      // Thêm sản phẩm vào danh sách
+      products.add(productData);
+    } catch (e) {
+      print('Lỗi khi thêm sản phẩm: $e');
+    }
+  }
+
+
 }

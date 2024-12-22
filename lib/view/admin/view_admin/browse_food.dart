@@ -8,6 +8,7 @@ import 'package:hungry_hub_web/widgets/common_widget/admin/drinks.dart';
 import 'package:hungry_hub_web/widgets/common_widget/admin/snacks.dart';
 
 import '../../../view_model/get_data_viewmodel.dart';
+import '../../../widgets/common_widget/admin/add_food.dart';
 
 class BrowseFood extends StatefulWidget{
   const BrowseFood({super.key});
@@ -27,7 +28,7 @@ class _BrowseFoodState extends State<BrowseFood> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     // Initialize TabController with 6 tabs and the current index set to 0
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
     _loadProducts();
   }
   Future<void> _loadProducts() async {
@@ -78,6 +79,7 @@ class _BrowseFoodState extends State<BrowseFood> with SingleTickerProviderStateM
                           Tab(text: 'Burger - Rice - Spaghetti'),
                           Tab(text: 'Snacks'),
                           Tab(text: 'Drinks And DessertsView'),
+                          Tab(text: 'Add Item Food'),
                         ],
                       ),
                     ),
@@ -96,6 +98,7 @@ class _BrowseFoodState extends State<BrowseFood> with SingleTickerProviderStateM
                 Burger(listDS: controllerTestView.products,),
                 Snacks(listDS: controllerTestView.products,),
                 Drinks(listDS: controllerTestView.products,),
+                AddFood(),
               ],
             ),
           ),

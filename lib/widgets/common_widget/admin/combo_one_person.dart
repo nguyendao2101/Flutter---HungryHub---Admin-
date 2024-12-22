@@ -61,10 +61,14 @@ class ComboOnePerson extends StatelessWidget {
                 ),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
 }
