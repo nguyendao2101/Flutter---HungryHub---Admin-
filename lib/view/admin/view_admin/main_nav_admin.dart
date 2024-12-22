@@ -6,7 +6,7 @@ import 'package:hungry_hub_web/view/admin/view_admin/browse_store.dart';
 import 'package:hungry_hub_web/view_model/admin/main_nav_view_model.dart';
 import 'package:hungry_hub_web/widgets/common/image_extention.dart';
 
-import '../../../widgets/common_widget/admin/icon_text_row.dart';
+import '../../../widgets/common_widget/icon_text_row.dart';
 
 class MainNavAdmin extends StatefulWidget {
   const MainNavAdmin({super.key});
