@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hungry_hub_web/widgets/common_widget/button/bassic_button.dart';
 
 class AddFood extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -23,6 +24,16 @@ class AddFood extends StatelessWidget {
     } catch (e) {
       print('Lỗi khi thêm sản phẩm: $e');
     }
+  }
+  void resetFields() {
+    nameController.clear();
+    priceController.clear();
+    categoryController.clear();
+    descriptionController.clear();
+    imageUrlController.clear();
+    imageUrlFacebookController.clear();
+    showController.clear();
+    idController.clear();
   }
 
   @override
@@ -73,26 +84,32 @@ class AddFood extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Thu thập dữ liệu từ các trường nhập liệu
-                    final productData = {
-                      'Name': nameController.text,
-                      'Price': int.tryParse(priceController.text) ?? 0,
-                      'Category': categoryController.text,
-                      'Description': descriptionController.text,
-                      'ImageUrl': imageUrlController.text,
-                      'ImageUrlFacebook': imageUrlFacebookController.text,
-                      'Show': int.tryParse(showController.text) ?? 0,
-                    };
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 700),
+                  child: BasicAppButton(onPressed: (){
+                        // Thu thập dữ liệu từ các trường nhập liệu
+                        final productData = {
+                          'Name': nameController.text,
+                          'Price': int.tryParse(priceController.text) ?? 0,
+                          'Category': categoryController.text,
+                          'Description': descriptionController.text,
+                          'ImageUrl': imageUrlController.text,
+                          'ImageUrlFacebook': imageUrlFacebookController.text,
+                          'Show': int.tryParse(showController.text) ?? 0,
+                        };
 
-                    // Gọi hàm thêm sản phẩm với ID người dùng nhập vào
-                    final id = idController.text;
-                    addProduct(productData, id);
+                        // Gọi hàm thêm sản phẩm với ID người dùng nhập vào
+                        final id = idController.text;
+                        addProduct(productData, id);
 
-                    // Quay về màn hình trước đó
-                  },
-                  child: Text('Lưu'),
+                        // Quay về màn hình trước đó
+                        resetFields();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Success!')),
+                        );
+                  }, title: 'Save', sizeTitle: 16, colorButton: Color(0xffFB4141), radius: 8,
+                  fontW: FontWeight.w500, height: 50,
+                  ),
                 ),
               ),
             ],

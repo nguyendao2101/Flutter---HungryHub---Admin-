@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hungry_hub_web/view/admin/view_admin/browse_food.dart';
 import 'package:hungry_hub_web/view/admin/view_admin/browse_store.dart';
+import 'package:hungry_hub_web/view/login_view.dart';
 import 'package:hungry_hub_web/view_model/admin/main_nav_view_model.dart';
 import 'package:hungry_hub_web/widgets/common/image_extention.dart';
 
@@ -168,7 +170,9 @@ class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateM
                         left:
                         0, // Hoặc left: 0 nếu bạn muốn hình ảnh nằm bên trái
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            // Get.to(() => LoginView());
+                          },
                           child: Image.asset(
                             ImageAsset.loadLogoApp,
                             height: 120,
@@ -178,17 +182,53 @@ class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateM
                       Positioned(
                         top: 14,
                         right:
-                        0, // Hoặc left: 0 nếu bạn muốn hình ảnh nằm bên trái
-                        child: InkWell(
-                          onTap: () {
-                            // Get.to(() => const InfoUserView());
-                          },
-                          child: Image.asset(
-                            ImageAsset.users,
-                            height: 32,
-                            width: 32,
+                        16, // Hoặc left: 0 nếu bạn muốn hình ảnh nằm bên trái
+                        child: SizedBox(
+                          width: 48, // Tăng kích thước để dễ nhấn hơn
+                          height: 48,
+                          child: PopupMenuButton<int>(
+                            color: Colors.white,
+                            offset: const Offset(-10, 15),
+                            elevation: 1,
+                            icon: Image.asset(ImageAsset.users, height: 48,),
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context) {
+                              return [
+                                PopupMenuItem(
+                                  value: 1,
+                                  height: 40,  // Đặt chiều cao của PopupMenuItem
+                                  padding: EdgeInsets.zero, // Xóa padding mặc định
+                                  child: InkWell(
+                                    onTap: () {
+                                      Get.offAll(() => const LoginView());
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,  // Chỉ chiếm không gian đủ cho các phần tử bên trong
+                                      children: [
+                                        const SizedBox(width: 32),  // Thêm khoảng cách giữa ảnh và text
+                                        Image.asset(
+                                          ImageAsset.logOut,
+                                          height: 20,  // Điều chỉnh kích thước ảnh sao cho phù hợp
+                                          width: 20,
+                                        ),
+                                        const SizedBox(width: 20),  // Thêm khoảng cách giữa ảnh và text
+                                        const Text(
+                                          "Log out",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xff32343E),
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Poppins',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ];
+                            },
                           ),
-                        ),
+                        )
                       ),
                     ],
                   ),
