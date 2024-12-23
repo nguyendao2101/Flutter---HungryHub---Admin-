@@ -11,25 +11,32 @@ import 'package:hungry_hub_web/widgets/common/image_extention.dart';
 import '../../../widgets/common_widget/icon_text_row.dart';
 
 class MainNavAdmin extends StatefulWidget {
-  const MainNavAdmin({super.key});
+  final int initialIndex;
+  const MainNavAdmin({super.key, required this.initialIndex});
 
   @override
   State<MainNavAdmin> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateMixin{
-  TabController? _tabController;
+  TabController? tabController;
+  int selectTab = 0;
 
   @override
   void initState() {
     super.initState();
-    // Initialize TabController with 6 tabs and the current index set to 0
-    _tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(
+        length: 2, vsync: this, initialIndex: widget.initialIndex);
+
+    tabController?.addListener(() {
+      selectTab = tabController?.index ?? 0;
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
-    _tabController?.dispose();
+    tabController?.dispose();
     super.dispose();
   }
 
@@ -67,15 +74,17 @@ class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateM
                 ),
               ),
               IconTextRow(
-                  title: 'Browse Store',
+                  title: 'Browse Shop',
                   onTap: () {
-                    // Get.to(() => const CalendarView());
+                    Get.to(() => const MainNavAdmin(initialIndex: 0,));
+                    controller.closeDrawer();
                   }),
               _dividerDrawer(),
               IconTextRow(
                   title: 'Browse Food',
                   onTap: () {
-                    // Get.to(() => const ResultsAndStandingsResultsView());
+                    Get.to(() => const MainNavAdmin(initialIndex: 1,));
+                    controller.closeDrawer();
                   }),
               _dividerDrawer(),
             ],
@@ -151,7 +160,7 @@ class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateM
                         child: Padding(
                           padding: const EdgeInsets.only(left: 48),
                           child: TabBar(
-                            controller: _tabController,
+                            controller: tabController,
                             indicatorColor: Colors.red,
                             indicatorWeight: 1,
                             labelColor: Colors.white,
@@ -159,7 +168,7 @@ class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateM
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             isScrollable: true,
                             tabs: const [
-                              Tab(text: 'Browse Store'),
+                              Tab(text: 'Browse Shop'),
                               Tab(text: 'Browse Food'),
                             ],
                           ),
@@ -248,10 +257,10 @@ class _MyWidgetState extends State<MainNavAdmin> with SingleTickerProviderStateM
           ),
         ),
         body: TabBarView(
-          controller: _tabController,
-          children: const [
+          controller: tabController,
+          children: [
             BrowseStore(),
-            BrowseFood()
+            const BrowseFood()
           ],
         ),
       ),

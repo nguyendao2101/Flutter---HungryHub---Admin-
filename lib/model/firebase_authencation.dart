@@ -84,7 +84,7 @@ class FirAuth {
           final userRole = userData['role'];
           print('form role1: $userRole');
           if (userRole == 'admin') {
-            Get.offAll(() => const MainNavAdmin());
+            Get.offAll(() => const MainNavAdmin(initialIndex: 0,));
           } else if (userRole == 'shop'){
             print('form role: $userRole');
             Get.offAll(() => const MainNavShop());

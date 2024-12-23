@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const LoginView(),
-      home: MainNavAdmin(),
+      home: MainNavAdmin(initialIndex: 0,),
     );
   }
 }

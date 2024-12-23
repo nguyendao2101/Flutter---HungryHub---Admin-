@@ -565,14 +565,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  svg_icon:
-    dependency: "direct main"
-    description:
-      name: svg_icon
-      sha256: "69393ffefce1dd122ef31c3c74692744fc7153a9e9d07700549856ee9c5c07f5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   synchronized:
     dependency: transitive
     description:
