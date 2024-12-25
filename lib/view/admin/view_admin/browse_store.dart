@@ -169,20 +169,47 @@ class _BrowseShopScreenState extends State<BrowseStore> {
       floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
         child: FloatingActionButton.extended(
-          onPressed: (){
+          onPressed: () {
+            if (selectedUserIds.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Vui lòng chọn ít nhất một user để cập nhật!')),
+              );
+              return;
+            }
+
+            // Lặp qua từng userId đã chọn
+            for (final userId in selectedUserIds) {
+              final user = browseShopUsers.firstWhere(
+                    (user) => user['userId'] == userId,
+                orElse: () => {},
+              );
+
+              if (user.isNotEmpty) {
+                final email = user['email'] ?? 'Không có email';
+                final fullName = user['fullName'] ?? 'Không có tên';
+
+                // Gọi phương thức sendEmail cho từng người dùng
+                controller.sendEmail(email, fullName);
+              }
+            }
+
+            // Cập nhật UI và dữ liệu
             updateRolesAndRefreshUI();
-            controller.sendEmail('nguyendao2112kientruc@gmail.com', 'nguyendao');
           },
-          icon: const Icon(Icons.update, color: Colors.white,),
-          label: const Text('Update', style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Poppins',
-          ),),
+          icon: const Icon(Icons.update, color: Colors.white),
+          label: const Text(
+            'Update',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Poppins',
+            ),
+          ),
           backgroundColor: Colors.red,
         ),
       ),
+
     );
   }
 }

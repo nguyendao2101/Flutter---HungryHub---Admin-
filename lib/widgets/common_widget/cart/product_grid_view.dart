@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../view_model/get_data_viewmodel.dart';
 import '../../../view_model/home_view_model.dart';
 import '../evaluate/evaluate.dart';
+import '../food_detail/food_detail.dart';
 import '../text/truncated_text.dart';
 
 
@@ -17,12 +18,12 @@ class ProductGridView extends StatelessWidget {
     final controllerData = Get.put(GetDataViewModel());
     return GestureDetector(
       onTap: (){
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => FoodDetail(productDetail: product,),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FoodDetail(productDetail: product,),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),

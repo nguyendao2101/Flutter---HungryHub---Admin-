@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../view_model/get_data_viewmodel.dart';
 import '../../../view_model/home_view_model.dart';
 import '../evaluate/evaluate.dart';
+import '../food_detail/food_detail.dart';
 import '../text/truncated_text.dart';
 
 
@@ -17,12 +18,12 @@ class ShopProductGridView extends StatelessWidget {
     final controllerData = Get.put(GetDataViewModel());
     return GestureDetector(
       onTap: (){
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => FoodDetail(productDetail: product,),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FoodDetail(productDetail: product,),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -33,57 +34,26 @@ class ShopProductGridView extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.network(
-                      product['ImageUrlFacebook'] ?? '',
-                      width: double.infinity,
-                      height: 150,
-                      fit: BoxFit.fill,
-                      errorBuilder: (context, error, stackTrace) {
-                        // In thêm thông tin chi tiết về lỗi
-                        print("Error loading image: ${error.toString()}");
-                        print("StackTrace: $stackTrace");
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  product['ImageUrlFacebook'] ?? '',
+                  width: double.infinity,
+                  height: 150,
+                  fit: BoxFit.fill,
+                  errorBuilder: (context, error, stackTrace) {
+                    // In thêm thông tin chi tiết về lỗi
+                    print("Error loading image: ${error.toString()}");
+                    print("StackTrace: $stackTrace");
 
-                        // Trả về hình ảnh mặc định hoặc icon báo lỗi
-                        return const Icon(
-                          Icons.broken_image,
-                          size: 95,
-                          color: Colors.grey,
-                        );
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    top: 10, // Khoảng cách từ trên
-                    right: 10, // Khoảng cách từ phải
-                    child: GestureDetector(
-                      onTap: () {
-                        // Hàm xử lý khi nhấn vào icon edit
-                        print('Edit icon tapped');
-                        showEditProductDialog(
-                          context,
-                          product['id'],
-                          product,
-                              (updatedData) {
-                            controllerData.updateProduct(product['id'], updatedData);
-                          },
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: Colors.white.withOpacity(0.8), // Màu nền mờ
-                        child: const Icon(
-                          Icons.edit,
-                          size: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                    // Trả về hình ảnh mặc định hoặc icon báo lỗi
+                    return const Icon(
+                      Icons.broken_image,
+                      size: 95,
+                      color: Colors.grey,
+                    );
+                  },
+                ),
               ),
 
               Padding(
