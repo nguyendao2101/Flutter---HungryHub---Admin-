@@ -6,6 +6,12 @@ import 'package:hungry_hub_web/widgets/common_widget/admin/combo_group.dart';
 import 'package:hungry_hub_web/widgets/common_widget/admin/combo_one_person.dart';
 import 'package:hungry_hub_web/widgets/common_widget/admin/drinks.dart';
 import 'package:hungry_hub_web/widgets/common_widget/admin/snacks.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop_food/burger.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop_food/chickend.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop_food/combo_group.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop_food/combo_one_person.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop_food/drinks.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop_food/snacks.dart';
 
 import '../../../view_model/get_data_viewmodel.dart';
 import '../../../widgets/common_widget/admin/add_food.dart';
@@ -28,7 +34,7 @@ class _EvaluateViewState extends State<EvaluateView> with SingleTickerProviderSt
   void initState() {
     super.initState();
     // Initialize TabController with 6 tabs and the current index set to 0
-    _tabController = TabController(length: 7, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
     _loadProducts();
   }
   Future<void> _loadProducts() async {
@@ -79,7 +85,6 @@ class _EvaluateViewState extends State<EvaluateView> with SingleTickerProviderSt
                           Tab(text: 'Burger - Rice - Spaghetti'),
                           Tab(text: 'Snacks'),
                           Tab(text: 'Drinks And DessertsView'),
-                          Tab(text: 'Add Item Food'),
                         ],
                       ),
                     ),
@@ -92,13 +97,12 @@ class _EvaluateViewState extends State<EvaluateView> with SingleTickerProviderSt
             child: TabBarView(
               controller: _tabController,
               children: [
-                ComboOnePerson(listDS: controllerTestView.products,),
-                ComboGroup(listDS: controllerTestView.products,),
-                Chickend(listDS: controllerTestView.products,),
-                Burger(listDS: controllerTestView.products,),
-                Snacks(listDS: controllerTestView.products,),
-                Drinks(listDS: controllerTestView.products,),
-                AddFood(),
+                ComboOnePersonShop(listDS: controllerTestView.products,),
+                ComboGroupShop(listDS: controllerTestView.products,),
+                ChickendShop(listDS: controllerTestView.products,),
+                BurgerShop(listDS: controllerTestView.products,),
+                SnacksShop(listDS: controllerTestView.products,),
+                DrinksShop(listDS: controllerTestView.products,),
               ],
             ),
           ),
