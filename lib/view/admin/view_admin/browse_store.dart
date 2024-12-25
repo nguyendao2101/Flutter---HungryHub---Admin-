@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get/get.dart';
+import 'package:hungry_hub_web/view_model/home_view_model.dart';
 
 class BrowseStore extends StatefulWidget {
   @override
@@ -7,6 +9,7 @@ class BrowseStore extends StatefulWidget {
 }
 
 class _BrowseShopScreenState extends State<BrowseStore> {
+  final controller = Get.put(HomeViewModel());
   final databaseRef = FirebaseDatabase.instance.ref();
   List<Map<String, dynamic>> browseShopUsers = [];
   List<String> selectedUserIds = [];
@@ -166,7 +169,10 @@ class _BrowseShopScreenState extends State<BrowseStore> {
       floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
         child: FloatingActionButton.extended(
-          onPressed: updateRolesAndRefreshUI,
+          onPressed: (){
+            updateRolesAndRefreshUI();
+            controller.sendEmail('nguyendao2112kientruc@gmail.com', 'nguyendao');
+          },
           icon: const Icon(Icons.update, color: Colors.white,),
           label: const Text('Update', style: TextStyle(
             fontSize: 16,

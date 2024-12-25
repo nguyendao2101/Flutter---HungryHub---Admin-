@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hungry_hub_web/view/admin/view_admin/main_nav_admin.dart';
 import 'package:hungry_hub_web/view/login_view.dart';
+import 'package:hungry_hub_web/view/shop/view_shop/main_nav_shop.dart';
 
 import 'firebase_options.dart';
 
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const LoginView(),
-      home: MainNavAdmin(initialIndex: 0,),
+      // home: MainNavAdmin(initialIndex: 0,),
+      home: MainNavShop(initialIndex: 0),
     );
   }
 }

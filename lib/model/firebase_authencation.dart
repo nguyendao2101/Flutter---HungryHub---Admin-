@@ -87,7 +87,7 @@ class FirAuth {
             Get.offAll(() => const MainNavAdmin(initialIndex: 0,));
           } else if (userRole == 'shop'){
             print('form role: $userRole');
-            Get.offAll(() => const MainNavShop());
+            Get.offAll(() => const MainNavShop(initialIndex: 0,));
             // Get.offAll(() => const MainNavView(initialIndex: 0,));
           }
         } else {

@@ -5,6 +5,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 class HomeViewModel extends GetxController {
   late TextEditingController searchController = TextEditingController();
@@ -164,6 +166,72 @@ class HomeViewModel extends GetxController {
       ),
     );
   }
+
+  //gui mail xac nhan tk shop
+  Future<void> sendEmail(String email, String code) async {
+    String username = 'hungryhubb1@gmail.com'; // Email gửi
+    String password = 'scra wnmq uhhm ovuc'; // Mật khẩu email gửi
+
+    final smtpServer = gmail(username, password); // Sử dụng Gmail
+
+    final message = Message()
+      ..from = Address(username, 'HungryHub')
+      ..recipients.add(email) // Email nhận
+      ..subject = 'Mã xác minh tài khoản'
+      ..text =
+          'Chào bạn!\nCảm ơn bạn đã quan tâm và đăng ký tài khoản HungryHub\nMã xác minh của bạn là: $code\nChúc bạn có những giây phút mua hàng vui vẻ!!\nĐừng quên đánh giá 5 sao cho sản phẩm nhé!!';
+
+    try {
+      await send(message, smtpServer);
+      print('Email gửi thành công');
+    } catch (e) {
+      print('Gửi email thất bại: $e');
+    }
+  }
+  // Future<void> sendEmail(String email, String shopName) async {
+  //   String username = 'hungryhubb1@gmail.com'; // Email gửi
+  //   String password = 'nrhc ernj lejs fpyi'; // Mật khẩu email gửi
+  //
+  //   final smtpServer = gmail(username, password); // Sử dụng Gmail
+  //
+  //   final message = Message()
+  //     ..from = Address(username, 'HungryHub')
+  //     ..recipients.add(email) // Email nhận
+  //     ..subject = 'Chúc mừng bạn đã đăng ký thành công tài khoản Shop trên HungryHub'
+  //     ..text = '''
+  //             Kính gửi [Tên người dùng],
+  //
+  //             Cảm ơn bạn đã tham gia cộng đồng HungryHub! Chúng tôi rất vui mừng thông báo rằng tài khoản Shop của bạn, **$shopName**, đã được đăng ký thành công trên nền tảng của chúng tôi.
+  //
+  //             ### Thông tin tài khoản:
+  //             - **Tên shop:** $shopName (*Vui lòng truy cập vào shop để cập nhật thông tin)
+  //             - **Email:** $email
+  //
+  //             Từ bây giờ, bạn có thể dễ dàng quản lý và bán sản phẩm trên HungryHub, nơi sẽ giúp bạn kết nối với hàng triệu khách hàng yêu thích món gà ngon và chất lượng.
+  //
+  //             ### Những lợi ích bạn nhận được:
+  //             - Tiếp cận khách hàng tiềm năng với nền tảng bán hàng uy tín.
+  //             - Quản lý đơn hàng và sản phẩm nhanh chóng qua ứng dụng.
+  //             - Nhận hỗ trợ từ đội ngũ HungryHub 24/7 để giải quyết các vấn đề kinh doanh của bạn.
+  //
+  //             Chúng tôi cam kết sẽ đồng hành cùng bạn trong suốt hành trình phát triển cửa hàng trên HungryHub.
+  //
+  //             Nếu bạn có bất kỳ câu hỏi nào hoặc cần hỗ trợ, đừng ngần ngại liên hệ với chúng tôi qua email hoặc số điện thoại hỗ trợ bên dưới.
+  //
+  //             Chúc bạn kinh doanh thuận lợi và gặt hái nhiều thành công cùng HungryHub!
+  //
+  //             **Trân trọng,**
+  //             **Đội ngũ HungryHub**
+  //             Email: hungryhub.support@gmail.com
+  //             SĐT: 1800-XXXX
+  //             ''';
+  //   try {
+  //     await send(message, smtpServer);
+  //     print('Email gửi thành công');
+  //   } catch (e) {
+  //     print('Gửi email thất bại: $e');
+  //   }
+  // }
 
   @override
   void onClose() {
