@@ -281,7 +281,7 @@ class _MyWidgetState extends State<MainNavShop> with SingleTickerProviderStateMi
             const OrderView(),
             const RevenueView(),
             const EvaluateView(),
-            const StoreManagementView(),
+             StoreManagementView(),
           ],
         ),
       ),
