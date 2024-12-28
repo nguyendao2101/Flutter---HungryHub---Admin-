@@ -34,13 +34,6 @@ class _OrderViewState extends State<OrderView> with SingleTickerProviderStateMix
     _tabController = TabController(length: 3, vsync: this);
 
   }
-  // Future<void> _loadProducts() async {
-  //   await controllerTestView.fetchProducts();
-  //   setState(() {
-  //     _products = controllerTestView.products;
-  //     _isLoadingProducts = false;
-  //   });
-  // }
 
   @override
   void dispose() {
@@ -77,7 +70,7 @@ class _OrderViewState extends State<OrderView> with SingleTickerProviderStateMix
                         isScrollable: true,
                         tabs: const [
                           Tab(text: 'Confirm Oder'),
-                          Tab(text: 'Pending delivery'),
+                          Tab(text: 'Waiting For Delivery'),
                           Tab(text: 'Delivered'),
                         ],
                       ),
@@ -92,8 +85,8 @@ class _OrderViewState extends State<OrderView> with SingleTickerProviderStateMix
               controller: _tabController,
               children: [
                 Confirm(),
-                Delivered(),
                 PendingDelivery(),
+                Delivered(),
               ],
             ),
           ),

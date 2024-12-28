@@ -41,10 +41,10 @@ class _StoreManagementViewState extends State<StoreManagementView> {
           setState(() {
             nameController.text = data['Name'] ?? '';
             addressController.text = data['Address'] ?? '';
-            latitudeController.text = data['Latitude'] ?? '';
-            longitudeController.text = data['Longitude'] ?? '';
-            phoneNumberController.text = data['PhoneNumber'] ?? '';
-            wardsController.text = data['Wards'] ?? '';
+            latitudeController.text = data['Latitude'].toString() ?? '';
+            longitudeController.text = data['Longitude'].toString() ?? '';
+            phoneNumberController.text = data['PhoneNumber'].toString() ?? '';
+            wardsController.text = data['Wards '] ?? '';
             listProducts.clear();
             if (data['ListProducts'] is List) {
               listProducts.addAll(List<Map<String, dynamic>>.from(data['ListProducts']));
@@ -92,7 +92,7 @@ class _StoreManagementViewState extends State<StoreManagementView> {
                     _buildTextField(latitudeController, 'Latitude', 'Vui lòng nhập vĩ độ', keyboardType: TextInputType.number),
                     _buildTextField(longitudeController, 'Longitude', 'Vui lòng nhập kinh độ', keyboardType: TextInputType.number),
                     _buildTextField(phoneNumberController, 'Phone Number', 'Vui lòng nhập số điện thoại'),
-                    _buildTextField(wardsController, 'Wards ', 'Vui lòng nhập phường'),
+                    _buildTextField(wardsController, 'Wards', 'Vui lòng nhập phường'),
 
                     const SizedBox(height: 20),
                     const Text(
@@ -105,8 +105,8 @@ class _StoreManagementViewState extends State<StoreManagementView> {
                       itemBuilder: (context, index) {
                         final product = listProducts[index];
                         return ListTile(
-                          title: Text('${product['name']}'),
-                          subtitle: Text('Giá: ${product['price']}'),
+                          title: Text('${product['id']}'),
+                          subtitle: Text('Stock: ${product['Stock']}'),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () => removeProductFromList(index),

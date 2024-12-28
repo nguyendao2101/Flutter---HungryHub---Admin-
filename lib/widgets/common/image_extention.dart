@@ -39,6 +39,11 @@ class ImageAsset {
   static String stripe = '$baseImagePathPNG/stripe.png';
   static String check = '$baseImagePathPNG/check.png';
   static String remove = '$baseImagePathPNG/remove.png';
+  //web
+  static String confirmation = '$baseImagePathPNG/confirmation.png';
+  static String delivery = '$baseImagePathPNG/delivery.png';
+  static String delivered = '$baseImagePathPNG/delivered.png';
+
 
   // SVG
   static String home = '$baseImagesPathSVG/home$format';
