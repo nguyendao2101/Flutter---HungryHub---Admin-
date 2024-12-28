@@ -12,6 +12,7 @@ import 'package:hungry_hub_web/widgets/common_widget/shop/delivered.dart';
 import 'package:hungry_hub_web/widgets/common_widget/shop/month_view.dart';
 import 'package:hungry_hub_web/widgets/common_widget/shop/pending_delivery.dart';
 import 'package:hungry_hub_web/widgets/common_widget/shop/quarter_view.dart';
+import 'package:hungry_hub_web/widgets/common_widget/shop/week_view.dart';
 import 'package:hungry_hub_web/widgets/common_widget/shop/year_view.dart';
 
 import '../../../view_model/get_data_viewmodel.dart';
@@ -35,7 +36,7 @@ class _RevenueViewState extends State<RevenueView> with SingleTickerProviderStat
   void initState() {
     super.initState();
     // Initialize TabController with 6 tabs and the current index set to 0
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
   }
   // Future<void> _loadProducts() async {
@@ -82,7 +83,7 @@ class _RevenueViewState extends State<RevenueView> with SingleTickerProviderStat
                         tabs: const [
                           Tab(text: 'Day'),
                           Tab(text: 'Week'),
-                          Tab(text: 'Quarter'),
+                          Tab(text: 'Month'),
                           Tab(text: 'Year'),
                         ],
                       ),
@@ -97,8 +98,8 @@ class _RevenueViewState extends State<RevenueView> with SingleTickerProviderStat
               controller: _tabController,
               children: [
                 DayView(),
+                WeekView(),
                 MonthView(),
-                QuarterView(),
                 YearView(),
               ],
             ),

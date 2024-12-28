@@ -43,6 +43,8 @@ class ImageAsset {
   static String confirmation = '$baseImagePathPNG/confirmation.png';
   static String delivery = '$baseImagePathPNG/delivery.png';
   static String delivered = '$baseImagePathPNG/delivered.png';
+  static String download = '$baseImagePathPNG/download.png';
+  static String upArrow = '$baseImagePathPNG/up-arrow.png';
 
 
   // SVG
