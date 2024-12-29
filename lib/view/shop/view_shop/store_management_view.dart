@@ -34,7 +34,10 @@ class _StoreManagementViewState extends State<StoreManagementView> {
 
   Future<void> fetchShopData() async {
     try {
-      final doc = await _firestore.collection('stores').doc(controllerMainNavShop.userId).get();
+      final doc = await _firestore
+          .collection('stores')
+          .doc(controllerMainNavShop.userId)
+          .get();
       if (doc.exists) {
         final data = doc.data();
         if (data != null) {
@@ -47,7 +50,8 @@ class _StoreManagementViewState extends State<StoreManagementView> {
             wardsController.text = data['Wards '] ?? '';
             listProducts.clear();
             if (data['ListProducts'] is List) {
-              listProducts.addAll(List<Map<String, dynamic>>.from(data['ListProducts']));
+              listProducts.addAll(
+                  List<Map<String, dynamic>>.from(data['ListProducts']));
             }
           });
         }
@@ -58,13 +62,17 @@ class _StoreManagementViewState extends State<StoreManagementView> {
       );
     }
   }
-  Future<void> addInfomationShop(Map<String, dynamic> storeData, String id) async {
+
+  Future<void> addInfomationShop(
+      Map<String, dynamic> storeData, String id) async {
     try {
       // Lưu thông tin cửa hàng vào Firestore
       await _firestore.collection('stores').doc(id).set(storeData);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Success! Store and product information has been successfully added!')),
+        const SnackBar(
+            content: Text(
+                'Success! Store and product information has been successfully added!')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -87,17 +95,26 @@ class _StoreManagementViewState extends State<StoreManagementView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildTextField(nameController, 'Store Name', 'Vui lòng nhập tên cửa hàng'),
-                    _buildTextField(addressController, 'Addresss', 'Vui lòng nhập địa chỉ'),
-                    _buildTextField(latitudeController, 'Latitude', 'Vui lòng nhập vĩ độ', keyboardType: TextInputType.number),
-                    _buildTextField(longitudeController, 'Longitude', 'Vui lòng nhập kinh độ', keyboardType: TextInputType.number),
-                    _buildTextField(phoneNumberController, 'Phone Number', 'Vui lòng nhập số điện thoại'),
-                    _buildTextField(wardsController, 'Wards', 'Vui lòng nhập phường'),
+                    _buildTextField(nameController, 'Store Name',
+                        'Vui lòng nhập tên cửa hàng'),
+                    _buildTextField(
+                        addressController, 'Addresss', 'Vui lòng nhập địa chỉ'),
+                    _buildTextField(
+                        latitudeController, 'Latitude', 'Vui lòng nhập vĩ độ',
+                        keyboardType: TextInputType.number),
+                    _buildTextField(longitudeController, 'Longitude',
+                        'Vui lòng nhập kinh độ',
+                        keyboardType: TextInputType.number),
+                    _buildTextField(phoneNumberController, 'Phone Number',
+                        'Vui lòng nhập số điện thoại'),
+                    _buildTextField(
+                        wardsController, 'Wards', 'Vui lòng nhập phường'),
 
                     const SizedBox(height: 20),
                     const Text(
                       'Product List',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     ListView.builder(
                       shrinkWrap: true,
@@ -114,8 +131,11 @@ class _StoreManagementViewState extends State<StoreManagementView> {
                         );
                       },
                     ),
-                    _buildTextField(productNameController, 'Product Name', 'Vui lòng nhập tên sản phẩm'),
-                    _buildTextField(productPriceController, 'Product Price', 'Vui lòng nhập giá sản phẩm', keyboardType: TextInputType.number),
+                    _buildTextField(productNameController, 'Product Name',
+                        'Vui lòng nhập tên sản phẩm'),
+                    _buildTextField(productPriceController, 'Product Stock',
+                        'Vui lòng nhập giá số lượng',
+                        keyboardType: TextInputType.number),
                     // ElevatedButton(
                     //   onPressed: addProductToList,
                     //   child: const Text('Add Product'),
@@ -138,7 +158,8 @@ class _StoreManagementViewState extends State<StoreManagementView> {
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: BasicAppButton(
                           onPressed: () {
-                            if (nameController.text.isNotEmpty && addressController.text.isNotEmpty) {
+                            if (nameController.text.isNotEmpty &&
+                                addressController.text.isNotEmpty) {
                               final storeData = {
                                 'Name': nameController.text,
                                 'Address': addressController.text,
@@ -148,10 +169,13 @@ class _StoreManagementViewState extends State<StoreManagementView> {
                                 'Wards': wardsController.text,
                                 'ListProducts': listProducts,
                               };
-                              addInfomationShop(storeData, controllerMainNavShop.userId);
+                              addInfomationShop(
+                                  storeData, controllerMainNavShop.userId);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Error! Please enter complete store information')),
+                                const SnackBar(
+                                    content: Text(
+                                        'Error! Please enter complete store information')),
                               );
                             }
                           },
@@ -175,7 +199,8 @@ class _StoreManagementViewState extends State<StoreManagementView> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, String errorMessage,
+  Widget _buildTextField(
+      TextEditingController controller, String label, String errorMessage,
       {TextInputType keyboardType = TextInputType.text}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -197,7 +222,8 @@ class _StoreManagementViewState extends State<StoreManagementView> {
   }
 
   void addProductToList() {
-    if (productNameController.text.isNotEmpty && productPriceController.text.isNotEmpty) {
+    if (productNameController.text.isNotEmpty &&
+        productPriceController.text.isNotEmpty) {
       setState(() {
         listProducts.add({
           'name': productNameController.text,
