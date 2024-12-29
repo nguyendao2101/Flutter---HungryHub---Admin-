@@ -8,10 +8,15 @@ import '../food_detail/food_detail.dart';
 import '../text/truncated_text.dart';
 
 
-class ProductGridView extends StatelessWidget {
+class ProductGridView extends StatefulWidget {
   final Map<String, dynamic> product;
   const ProductGridView({super.key, required this.product});
 
+  @override
+  State<ProductGridView> createState() => _ProductGridViewState();
+}
+
+class _ProductGridViewState extends State<ProductGridView> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeViewModel());
@@ -21,7 +26,7 @@ class ProductGridView extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FoodDetail(productDetail: product,),
+            builder: (context) => FoodDetail(productDetail: widget.product,),
           ),
         );
       },
@@ -39,9 +44,9 @@ class ProductGridView extends StatelessWidget {
                 ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.network(
-                  product['ImageUrlFacebook'] ?? '',
+                  widget.product['ImageUrlFacebook'] ?? '',
                   width: double.infinity,
-                  height: 150,
+                  height: 130,
                   fit: BoxFit.fill,
                   errorBuilder: (context, error, stackTrace) {
                     // In thêm thông tin chi tiết về lỗi
@@ -66,10 +71,10 @@ class ProductGridView extends StatelessWidget {
                     print('Edit icon tapped');
                     showEditProductDialog(
                       context,
-                      product['id'],
-                      product,
+                      widget.product['id'],
+                      widget.product,
                           (updatedData) {
-                        controllerData.updateProduct(product['id'], updatedData);
+                        controllerData.updateProduct(widget.product['id'], updatedData) ?? {};
                       },
                     );
                   },
@@ -93,7 +98,7 @@ class ProductGridView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TruncatedText(
-                      text: product['Name'],
+                      text: widget.product['Name'],
                       maxWidth: 180,
                       style: const TextStyle(
                         fontSize: 16,
@@ -103,7 +108,7 @@ class ProductGridView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Giá: ${product['Price']} VND',
+                      'Giá: ${widget.product['Price']} VND',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Color(0xff32343E),
@@ -114,12 +119,12 @@ class ProductGridView extends StatelessWidget {
                   ],
                 ),
               ),
-              const Column(
+              Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Evaluate(height: 24, width: 71),
+                      Evaluate(height: 24, width: 71, productDetail: widget.product ?? {},),
                     ],
                   ),
                 ],
@@ -130,6 +135,7 @@ class ProductGridView extends StatelessWidget {
       ),
     );
   }
+
   void showEditProductDialog(BuildContext context, String productId,
       Map<String, dynamic> currentData, Function(Map<String, dynamic>) onSubmit) {
     final TextEditingController nameController =
@@ -231,5 +237,4 @@ class ProductGridView extends StatelessWidget {
       },
     );
   }
-
 }

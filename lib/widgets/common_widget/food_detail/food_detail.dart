@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import '../../../view_model/elvaluate_product_view_model.dart';
 import '../../../view_model/home_view_model.dart';
 import '../../common/image_extention.dart';
 import '../button/bassic_button.dart';
@@ -21,6 +22,29 @@ class FoodDetail extends StatefulWidget {
 
 class _FoodDetailWebState extends State<FoodDetail> {
   final controller = Get.put(HomeViewModel());
+  final controllerEvalua = Get.put(ElvaluateProductViewModel());
+  final TextEditingController _commentController = TextEditingController(); // Controller cho TextField
+  double _rating = 0.0; // Biến lưu đánh giá sao
+  late Future<double> averageRating; // Lưu trữ giá trị trung bình đánh giá
+  late Future<List<Map<String, String>>> evaluations; // Lưu trữ danh sách đánh giá
+  double? averageRatingValue;
+
+  @override
+  void initState() {
+    super.initState();
+    averageRating = controllerEvalua.getAverageEvaluationByProduct(widget.productDetail['id']);
+    evaluations = controllerEvalua.getEvaluationsByProduct(widget.productDetail['id']);
+    _initializeAverageRating();
+  }
+  Future<void> _initializeAverageRating() async {
+    try {
+      averageRatingValue = await controllerEvalua.getAverageEvaluationByProduct(widget.productDetail['id']);
+      setState(() {}); // Cập nhật UI sau khi lấy được giá trị
+    } catch (e) {
+      print('Error fetching average rating: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,9 +167,53 @@ class _FoodDetailWebState extends State<FoodDetail> {
                               softWrap: true,
                               overflow: TextOverflow.visible,
                             ),
-                            const SizedBox(height: 20,),
-                            const Evaluate(height: 40, width: 80,),
                           ],
+                        ),
+                        const SizedBox(height: 16,),
+                        FutureBuilder<double>(
+                          future: averageRating,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Average Rating:',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xff32343E),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Poppins',
+                                    )
+                                ),
+                                Text(
+                                  'Average Rating: ${averageRatingValue!.toStringAsFixed(1)}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Poppins',
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: List.generate(5, (index) {
+                                    return Icon(
+                                      index < snapshot.data! ? Icons.star : Icons.star_border,
+                                      color: Colors.orange,
+                                      size: 30,
+                                    );
+                                  }),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -153,6 +221,71 @@ class _FoodDetailWebState extends State<FoodDetail> {
                 ),
                 const SizedBox(height: 30),
                 const TitleSeeMore(title: 'Product Review'),
+                FutureBuilder<List<Map<String, String>>>(
+                  future: evaluations,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: snapshot.data!
+                          .map(
+                            (eval) => ListTile(
+                          title: Column(
+                            children: [
+                              const Divider(),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey.shade300,
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.asset(
+                                        ImageAsset.users,
+                                        height: 40,
+                                        width: 40,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(eval['nameUser'] ?? 'Unknown', style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xff32343E),
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Poppins',
+                                      ),),
+                                      Text(eval['comment'] ?? 'No comment', style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xff32343E),
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Poppins',
+                                      ),)
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                            ],
+                          ),
+                        ),
+                      )
+                          .toList(),
+                    );
+                  },
+                ),
               ],
             ),
           ),
