@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Import GetX để sử dụng RxList
+import '../../../view_model/get_data_viewmodel.dart';
 import '../../common/image_extention.dart';
 import '../cart/product_grid_view.dart';
 import '../text/title.dart';
 
-class Chickend extends StatelessWidget {
-  final RxList<Map<String, dynamic>> listDS;
-
-  const Chickend({super.key, required this.listDS});
+class Chickend extends StatelessWidget { // Chuyển thành StatelessWidget
+  const Chickend({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controllerTestView = Get.put(GetDataViewModel());
+
+    // Sử dụng Obx để lắng nghe sự thay đổi của RxList
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -18,49 +20,44 @@ class Chickend extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-                child: TitleFood(
-                  text: 'Fried Chicken - Roast Chicken',
-                ),
+                child: TitleFood(text: 'Fried Chicken - Roast Chicken'),
               ),
               SizedBox(
                 width: double.infinity,
-                child: Obx(() => // Dùng Obx để theo dõi sự thay đổi của listDS
-                listDS.isEmpty
-                    ? const Center(child: CircularProgressIndicator())
-                    : GridView.builder(
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7, // Hiển thị 2 sản phẩm mỗi hàng
-                    crossAxisSpacing: 5.0, // Khoảng cách ngang giữa các ô
-                    mainAxisSpacing: 5.0, // Khoảng cách dọc giữa các ô
-                    childAspectRatio: 0.8, // Tỷ lệ giữa chiều rộng và chiều cao
-                  ),
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: listDS
-                      .where((product) =>
-                  product['Category'] == 'Gà Rán - Gà Quay')
-                      .length, // Lọc sản phẩm theo category
-                  itemBuilder: (context, index) {
-                    final filteredProducts = listDS
-                        .where((product) =>
-                    product['Category'] == 'Gà Rán - Gà Quay')
-                        .toList(); // Lọc sản phẩm ngay từ đầu
-                    final product = filteredProducts[index];
+                child: Obx(() {
+                  // Kiểm tra xem sản phẩm đã được tải hay chưa
+                  if (controllerTestView.products.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    // Lọc sản phẩm theo category
+                    final filteredProducts = controllerTestView.products
+                        .where((product) => product['Category'] == 'Gà Rán - Gà Quay')
+                        .toList();
 
-                    // Hiển thị sản phẩm phù hợp
-                    return ProductGridView(
-                      product: product,
+                    // Hiển thị GridView với các sản phẩm đã lọc
+                    return GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 7, // Hiển thị 2 sản phẩm mỗi hàng
+                        crossAxisSpacing: 5.0, // Khoảng cách ngang giữa các ô
+                        mainAxisSpacing: 5.0, // Khoảng cách dọc giữa các ô
+                        childAspectRatio: 0.8, // Tỷ lệ giữa chiều rộng và chiều cao
+                      ),
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = filteredProducts[index];
+                        // Hiển thị sản phẩm phù hợp
+                        return ProductGridView(product: product);
+                      },
                     );
-                  },
-                ),
-                ),
+                  }
+                }),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
