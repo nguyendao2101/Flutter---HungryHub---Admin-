@@ -75,11 +75,13 @@ class _WeekViewState extends State<WeekView> {
     DateTime startOfSameWeekLastMonth = DateTime(now.year, now.month - 1, now.day);
 
     var filteredOrdersCurrentWeek = _orderTracking.where((order) {
-      DateTime orderDate = DateTime.parse(order['purchaseDate'].toString());
-      return orderDate.isAfter(startOfThisWeek) &&
-          orderDate.isBefore(startOfThisWeek.add(const Duration(days: 7))) &&
-          order['storeId'].toString() == ordersViewModel.userId.toString();
+      DateTime orderDate = DateTime.tryParse(order['purchaseDate'].toString()) ?? DateTime(1970, 1, 1);
+      return orderDate.isAtSameMomentAs(startOfThisWeek) ||
+          (orderDate.isAfter(startOfThisWeek) &&
+              orderDate.isBefore(startOfThisWeek.add(const Duration(days: 7)))) &&
+              order['storeId'].toString() == ordersViewModel.userId.toString();
     }).toList();
+
 
     var filteredOrdersLastWeek = _orderTracking.where((order) {
       DateTime orderDate = DateTime.parse(order['purchaseDate'].toString());

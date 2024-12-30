@@ -39,60 +39,60 @@ class _ProductGridViewState extends State<ProductGridView> {
           ),
           child: Column(
             children: [
-                Stack(
+              Stack(
                 children: [
-                ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  widget.product['ImageUrlFacebook'] ?? '',
-                  width: double.infinity,
-                  height: 130,
-                  fit: BoxFit.fill,
-                  errorBuilder: (context, error, stackTrace) {
-                    // In thêm thông tin chi tiết về lỗi
-                    print("Error loading image: ${error.toString()}");
-                    print("StackTrace: $stackTrace");
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      widget.product['ImageUrlFacebook'] ?? '',
+                      width: double.infinity,
+                      height: 130,
+                      fit: BoxFit.fill,
+                      errorBuilder: (context, error, stackTrace) {
+                        // In thêm thông tin chi tiết về lỗi
+                        print("Error loading image: ${error.toString()}");
+                        print("StackTrace: $stackTrace");
 
-                    // Trả về hình ảnh mặc định hoặc icon báo lỗi
-                    return const Icon(
-                      Icons.broken_image,
-                      size: 95,
-                      color: Colors.grey,
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                top: 10, // Khoảng cách từ trên
-                right: 10, // Khoảng cách từ phải
-                child: GestureDetector(
-                  onTap: () {
-                    // Hàm xử lý khi nhấn vào icon edit
-                    print('Edit icon tapped');
-                    showEditProductDialog(
-                      context,
-                      widget.product['id'],
-                      widget.product,
-                          (updatedData) {
-                        controllerData.updateProduct(widget.product['id'], updatedData) ?? {};
+                        // Trả về hình ảnh mặc định hoặc icon báo lỗi
+                        return const Icon(
+                          Icons.broken_image,
+                          size: 95,
+                          color: Colors.grey,
+                        );
                       },
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.white.withOpacity(0.8), // Màu nền mờ
-                    child: const Icon(
-                      Icons.edit,
-                      size: 18,
-                      color: Colors.black,
                     ),
                   ),
-                ),
+                  Positioned(
+                    top: 10, // Khoảng cách từ trên
+                    right: 10, // Khoảng cách từ phải
+                    child: GestureDetector(
+                      onTap: () {
+                        // Hàm xử lý khi nhấn vào icon edit
+                        print('Edit icon tapped');
+                        showEditProductDialog(
+                          context,
+                          widget.product['id'],
+                          widget.product,
+                              (updatedData) {
+                            controllerData.updateProduct(widget.product['id'], updatedData) ?? {};
+                          },
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 15,
+                        backgroundColor: Colors.white.withOpacity(0.8), // Màu nền mờ
+                        child: const Icon(
+                          Icons.edit,
+                          size: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              ],
-            ),
 
-        Padding(
+              Padding(
                 padding: const EdgeInsets.only(right: 4, left: 4, top: 10, bottom: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,6 +162,9 @@ class _ProductGridViewState extends State<ProductGridView> {
     final TextEditingController showController =
     TextEditingController(text: currentData['Show'].toString());
 
+    String dropdownValue = currentData['Show'] == 1 ? 'Hiển thị' : 'Ẩn';
+    String dropdownValueCategory = currentData['Category'] ?? 'Combo 1 Người'; // Giá trị mặc định cho danh mục
+
     showDialog(
       context: context,
       builder: (context) {
@@ -179,9 +182,39 @@ class _ProductGridViewState extends State<ProductGridView> {
                   decoration: InputDecoration(labelText: 'Price'),
                   keyboardType: TextInputType.number,
                 ),
-                TextField(
-                  controller: categoryController,
-                  decoration: InputDecoration(labelText: 'Category'),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: dropdownValueCategory,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'Combo 1 Người',
+                      child: Text('Combo 1 Người'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Combo Nhóm',
+                      child: Text('Combo Nhóm'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Gà Rán - Gà Quay',
+                      child: Text('Gà Rán - Gà Quay'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Burger - Cơm - Mì Ý',
+                      child: Text('Burger - Cơm - Mì Ý'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Thức ăn nhẹ',
+                      child: Text('Thức ăn nhẹ'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Thức uống & tráng miệng',
+                      child: Text('Thức uống & tráng miệng'),
+                    ),
+                  ],
+                  onChanged: (String? newValue) {
+                    dropdownValueCategory = newValue!;
+                  },
+                  decoration: InputDecoration(labelText: 'Danh mục sản phẩm'),
                 ),
                 TextField(
                   controller: descriptionController,
@@ -199,10 +232,23 @@ class _ProductGridViewState extends State<ProductGridView> {
                   controller: idController,
                   decoration: InputDecoration(labelText: 'Id'),
                 ),
-                TextField(
-                  controller: showController,
-                  decoration: InputDecoration(labelText: 'Show'),
-                  keyboardType: TextInputType.number,
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: dropdownValue,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'Hiển thị',
+                      child: Text('Hiển thị'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Ẩn',
+                      child: Text('Ẩn'),
+                    ),
+                  ],
+                  onChanged: (String? newValue) {
+                    dropdownValue = newValue!;
+                  },
+                  decoration: InputDecoration(labelText: 'Trạng thái hiển thị'),
                 ),
               ],
             ),
@@ -219,13 +265,12 @@ class _ProductGridViewState extends State<ProductGridView> {
                 final updatedData = {
                   'Name': nameController.text,
                   'Price': int.tryParse(priceController.text) ?? 0,
-                  'Category': categoryController.text,
+                  'Category': dropdownValueCategory, // Lưu danh mục đã chọn
                   'Description': descriptionController.text,
                   'ImageUrl': imageUrlController.text,
                   'ImageUrlFacebook': imageUrlFacebookController.text,
                   'id': idController.text,
-                  'Show': int.tryParse(showController.text) ?? 0,
-
+                  'Show': dropdownValue == 'Hiển thị' ? 1 : 0, // Xử lý trạng thái
                 };
                 onSubmit(updatedData);
                 Navigator.pop(context);
