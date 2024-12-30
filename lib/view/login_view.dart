@@ -11,6 +11,8 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  bool isHuman = false; // Đặt biến isHuman ngoài build method
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginViewModel());
@@ -63,14 +65,59 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ),
                             const SizedBox(height: 16),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Transform.scale(
+                                      scale: 1, // Tăng kích thước Checkbox
+                                      child: Checkbox(
+                                        value: isHuman,
+                                        activeColor: const Color(0xffC62300),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isHuman = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12), // Khoảng cách giữa Checkbox và Text
+                                    const Text(
+                                      "I'm not a Robot",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xff32343E),
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (controller.formKey.currentState
-                                            ?.validate() ==
-                                        true) {
+                                    if ((controller.formKey.currentState
+                                        ?.validate() == true) && isHuman == true) {
                                       controller.onlogin();
                                       controller.emailController.clear();
                                       controller.passwordController.clear();
@@ -117,7 +164,7 @@ class _LoginViewState extends State<LoginView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Obx(
-        () => TextFormField(
+            () => TextFormField(
           controller: controller.passwordController,
           obscureText: controller.isObscured.value,
           style: const TextStyle(
@@ -186,7 +233,7 @@ class _LoginViewState extends State<LoginView> {
           labelText: 'Email',
           labelStyle: TextStyle(
               color:
-                  Colors.white.withOpacity(0.8)), // Slightly transparent label
+              Colors.white.withOpacity(0.8)), // Slightly transparent label
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12), // Rounded border
             borderSide: const BorderSide(
